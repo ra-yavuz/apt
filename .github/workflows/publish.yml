@@ -11,11 +11,6 @@ on:
       - '.github/workflows/publish.yml'
   workflow_dispatch:
 
-# Single-flight deploy: cancel any in-flight run when a new push lands.
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 permissions:
   contents: read
   pages: write
@@ -77,6 +72,12 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # Queue deploys so a newer push waits for an in-flight one to finish, never cancels it.
+    # The build job is intentionally NOT in this concurrency group: cancelling builds
+    # mid-flight has caused stuck Pages-environment slots in the past.
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
