@@ -1,0 +1,35 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Origin: ra-yavuz
+Label: ra-yavuz Linux packages
+Suite: stable
+Codename: stable
+Version: 1.0
+Architectures: amd64 arm64 all
+Components: main
+Description: Personal Debian/Ubuntu apt repository for ra-yavuz Linux tools.
+Date: Tue, 05 May 2026 08:50:53 UTC
+SHA256:
+ 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-all/Packages
+ adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-all/Packages.gz
+ 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-amd64/Packages
+ adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-amd64/Packages.gz
+ 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-arm64/Packages
+ adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-arm64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEOX+CYYLEr7PlQnlHe4oB3gHbXloFAmn5r20ACgkQe4oB3gHb
+Xlr8Gg//eJt1dLWrsmckSPjRjMDi5h9OakLR5hesTCUqwjB9T9wN7TU6wLrx88dh
+hKN/XyR2JQu6ZtuwWokHLHsYykvHESaC8VAb6lO7gCcgEfySfyuYakDwZGKXcSuL
+USxsAKNTiec/Uqq/xI/Xlgqwij9jb7lZch5Ze0yDO66a/c+Bm01wrzfLqCmlsJt6
+5qIp1v/ln+aTlQXoxIv1B1qUPwfkZKXgH8KdbVKf6utCi5PZ+BAk7tswiV+YGgPE
+xNeMCvFVsPCPGgpaTTotnCVLVXCGYw0ako+V4QDtOav/AE8dfUFnDb+nNL1irZgW
+0Fv6huRaKuPCuWK9de6avFk5lc0Iv/FkdHomLuOb6qz5bt9lINDMiQF4C7BbssAB
+TPmLYcRzY/T88zBzuksjx03gqXBT0s2rj9gI36jZzpr9+QKcNh1NGX9vFSE9ZgJM
+9vL8F9qIG5DC3D0XnrCZKHZcGQEd8yxDZUdK7fwELgJ5+PhtcWcH0jOHKCtDg98J
+QsLp1AZBASf7QTH7T/C6fAEJMoWougEjaNtEGtZaCSd8WERfprTBKX4LgoG4fZmu
+adZgL9EZxhAOiTsWEvlUTd+lGgLZjW/Pm4023yHh+fr+NVrTA7pwEX8qvXLIUNV0
+F1IK019rWBX5xxiasH2LHtK5s+r5WSzSrmEZEwUCZOeOw5UGW4I=
+=Q39s
+-----END PGP SIGNATURE-----

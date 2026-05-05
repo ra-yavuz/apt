@@ -1,0 +1,30 @@
+Package: inhibit-charge
+Version: 0.1.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: bash (>= 4.0), systemd, udev, coreutils
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/inhibit-charge
+Description: park laptop battery at a target charge level
+ inhibit-charge holds your laptop battery at a target percentage when on AC,
+ using the kernel's charge_behaviour=inhibit-charge mode. Unlike threshold-only
+ tools (TLP, GNOME, KDE), the battery does not trickle-cycle: it sits idle
+ while AC powers the system, eliminating wear from repeated mini-cycles.
+ .
+ Two modes are exposed via the power-mode command: home parks the battery
+ at a target percentage on AC; travel charges fully to 100%.
+ .
+ Requires kernel >= 5.17 and hardware that exposes inhibit-charge in
+ /sys/class/power_supply/BAT*/charge_behaviour. Tier-1 supported: ThinkPads
+ (thinkpad_acpi), Chromebooks (cros_ec). The daemon refuses to start on
+ unsupported hardware with a clear error.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The author is not liable for any
+ damage to battery, hardware, or data. By installing you accept full
+ responsibility. See /usr/share/doc/inhibit-charge/README.md for full text.
+Filename: pool/main/i/inhibit-charge/inhibit-charge_0.1.0-1_all.deb
+Size: 8634
+MD5sum: 3017f9a43deb0504f020604425171035
+SHA256: 0e155223716836277014208929364e9673ca60a0e4688a5c1fa788aef2731bf3
+

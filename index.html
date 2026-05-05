@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ra-yavuz Linux packages</title>
+<meta name="description" content="Personal Debian/Ubuntu apt repository for ra-yavuz's Linux tools. Add with one command.">
+<style>
+  :root {
+    --fg: #1a1a1a;
+    --muted: #6a6a6a;
+    --bg: #fafafa;
+    --card: #ffffff;
+    --line: #e5e5e5;
+    --code-bg: #f4f4f4;
+    --warn-bg: #fff7d6;
+    --warn-fg: #5a4500;
+    --warn-line: #e8d36b;
+    --link: #0a58ca;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #ececec;
+      --muted: #9a9a9a;
+      --bg: #161616;
+      --card: #1f1f1f;
+      --line: #2c2c2c;
+      --code-bg: #0f0f0f;
+      --warn-bg: #3a2e00;
+      --warn-fg: #f6e2a4;
+      --warn-line: #6a5500;
+      --link: #6ea8ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--fg); background: var(--bg);
+    line-height: 1.55;
+  }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  h1 { font-size: 1.9rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.15rem; margin: 36px 0 8px; letter-spacing: -0.005em; }
+  p.tag { color: var(--muted); margin: 0 0 32px; }
+  a { color: var(--link); }
+  code, pre { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace; }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; font-size: 0.92em; }
+  pre {
+    background: var(--code-bg);
+    padding: 14px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    overflow-x: auto;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  pre code { background: transparent; padding: 0; }
+  .warn {
+    background: var(--warn-bg);
+    color: var(--warn-fg);
+    border-left: 4px solid var(--warn-line);
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 0.94rem;
+    margin: 24px 0;
+  }
+  .warn strong { font-weight: 700; }
+  .pkg-grid {
+    display: grid;
+    gap: 12px;
+    margin: 12px 0 0;
+  }
+  .pkg {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .pkg h3 { font-size: 1rem; margin: 0 0 4px; font-family: ui-monospace, monospace; }
+  .pkg p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+  footer {
+    margin-top: 64px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .fp {
+    font-family: ui-monospace, monospace;
+    font-size: 0.82rem;
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>ra-yavuz Linux packages</h1>
+  <p class="tag">Personal Debian/Ubuntu apt repository for <a href="https://github.com/ra-yavuz">ra-yavuz</a>'s Linux tools.</p>
+
+  <div class="warn">
+    <strong>No warranty.</strong> Packages here are provided <em>as is</em>, without warranty of any kind. They may write to low-level system interfaces (battery firmware, kernel sysfs, etc). The maintainer is not liable for any damage to your hardware, data, or system. By adding this repository, you accept full responsibility for any consequences. Read each package's README before installing.
+  </div>
+
+  <h2>Add the repository</h2>
+  <pre><code># 1. Trust the signing key
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://ra-yavuz.github.io/apt/pubkey.gpg \
+  | sudo tee /etc/apt/keyrings/ra-yavuz.gpg &gt; /dev/null
+
+# 2. Add the apt source
+echo "deb [signed-by=/etc/apt/keyrings/ra-yavuz.gpg] https://ra-yavuz.github.io/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/ra-yavuz.list
+
+# 3. Update and install
+sudo apt update
+sudo apt install inhibit-charge</code></pre>
+
+  <h2>Packages</h2>
+  <div class="pkg-grid">
+    <div class="pkg">
+      <h3>inhibit-charge</h3>
+      <p>Park your laptop battery at a target charge using the kernel's <code>inhibit-charge</code> mode. <a href="https://github.com/ra-yavuz/inhibit-charge">source &amp; docs</a></p>
+    </div>
+  </div>
+
+  <h2>Signing key</h2>
+  <p>Name: <code>ra-yavuz Linux Packages &lt;yavuzramazan1994@gmail.com&gt;</code></p>
+  <p>Fingerprint: <span class="fp">54A2 E458 04D1 C743 F933&nbsp;&nbsp;27E3 5F74 F91A 8E47 CE5A</span></p>
+  <p>Public key: <a href="pubkey.gpg">pubkey.gpg</a> (binary) &middot; <a href="pubkey.asc">pubkey.asc</a> (ASCII)</p>
+
+  <h2>Removing the repository</h2>
+  <pre><code>sudo rm /etc/apt/sources.list.d/ra-yavuz.list /etc/apt/keyrings/ra-yavuz.gpg
+sudo apt update</code></pre>
+
+  <footer>
+    <p>Source: <a href="https://github.com/ra-yavuz/apt">github.com/ra-yavuz/apt</a> &middot; License: MIT (tooling); each package carries its own license.</p>
+  </footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,85 @@
+name: publish
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pool/**'
+      - 'scripts/**'
+      - 'index.html'
+      - 'pubkey.*'
+      - '.github/workflows/publish.yml'
+  workflow_dispatch:
+
+# Single-flight deploy: cancel any in-flight run when a new push lands.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev gnupg
+
+      - name: Import GPG signing key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.APT_GPG_PRIVATE_KEY }}
+          GPG_KEY_ID: ${{ secrets.APT_GPG_KEY_ID }}
+        run: |
+          if [ -z "$GPG_PRIVATE_KEY" ] || [ -z "$GPG_KEY_ID" ]; then
+            echo "ERROR: APT_GPG_PRIVATE_KEY or APT_GPG_KEY_ID secret is not set."
+            echo "See README in repo for setup instructions."
+            exit 1
+          fi
+          export GNUPGHOME=$(mktemp -d)
+          chmod 700 "$GNUPGHOME"
+          printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
+          # Verify the key we imported matches the configured key id.
+          gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10}' \
+            | grep -q "^$GPG_KEY_ID$" || {
+              echo "ERROR: imported key does not match APT_GPG_KEY_ID secret."
+              exit 1
+            }
+          echo "GNUPGHOME=$GNUPGHOME" >> "$GITHUB_ENV"
+
+      - name: Build apt index
+        env:
+          GPG_KEY_ID: ${{ secrets.APT_GPG_KEY_ID }}
+        run: bash scripts/build-index-portable.sh
+
+      - name: Stage site for Pages
+        run: |
+          mkdir -p _site
+          # Copy everything Pages should serve. We deliberately exclude
+          # .github, scripts, and README (those live on GitHub itself).
+          cp -r index.html pubkey.gpg pubkey.asc pool dists _site/
+          ls -la _site/
+          ls -la _site/dists/stable/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

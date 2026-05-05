@@ -1,0 +1,16 @@
+Origin: ra-yavuz
+Label: ra-yavuz Linux packages
+Suite: stable
+Codename: stable
+Version: 1.0
+Architectures: amd64 arm64 all
+Components: main
+Description: Personal Debian/Ubuntu apt repository for ra-yavuz Linux tools.
+Date: Tue, 05 May 2026 08:50:53 UTC
+SHA256:
+ 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-all/Packages
+ adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-all/Packages.gz
+ 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-amd64/Packages
+ adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-amd64/Packages.gz
+ 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-arm64/Packages
+ adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-arm64/Packages.gz
