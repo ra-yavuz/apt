@@ -1,0 +1,117 @@
+name: add-package
+
+# Listens for repository_dispatch events of type "package-published" sent by
+# the four packaged ra-yavuz/* repos at the end of their release CI.
+# Downloads the .deb attached to the release, drops it into pool/main/<i>/<pkg>/,
+# evicts any older version of the same package+arch, and commits + pushes.
+# The push then triggers the existing publish.yml which rebuilds and deploys
+# the apt index.
+#
+# Required client_payload fields:
+#   repo     "ra-yavuz/<name>"        e.g. "ra-yavuz/meowtrics"
+#   tag      "vX.Y.Z"                 e.g. "v0.1.3"
+#   arch     "amd64" or "all"         architecture from the .deb
+#   deb_url  full https URL of the .deb on the GitHub Release
+#
+# Sender side (in each project's ci.yml):
+#   curl -X POST \
+#     -H "Authorization: token $APT_DISPATCH_TOKEN" \
+#     -H "Accept: application/vnd.github+json" \
+#     https://api.github.com/repos/ra-yavuz/apt/dispatches \
+#     -d '{"event_type":"package-published","client_payload":{...}}'
+
+on:
+  repository_dispatch:
+    types: [package-published]
+
+permissions:
+  contents: write
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          # The default GITHUB_TOKEN works for pushing to this same repo.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate payload
+        env:
+          REPO:    ${{ github.event.client_payload.repo }}
+          TAG:     ${{ github.event.client_payload.tag }}
+          ARCH:    ${{ github.event.client_payload.arch }}
+          DEB_URL: ${{ github.event.client_payload.deb_url }}
+        run: |
+          set -euo pipefail
+          [ -n "$REPO" ]    || { echo "missing repo";    exit 1; }
+          [ -n "$TAG" ]     || { echo "missing tag";     exit 1; }
+          [ -n "$ARCH" ]    || { echo "missing arch";    exit 1; }
+          [ -n "$DEB_URL" ] || { echo "missing deb_url"; exit 1; }
+          # Only allow URLs from github.com release downloads on ra-yavuz/*.
+          case "$DEB_URL" in
+            https://github.com/ra-yavuz/*/releases/download/*/*.deb) ;;
+            *) echo "deb_url not a ra-yavuz GitHub release URL: $DEB_URL"; exit 1 ;;
+          esac
+          # Only allow ra-yavuz/* as repo.
+          case "$REPO" in
+            ra-yavuz/*) ;;
+            *) echo "repo not under ra-yavuz: $REPO"; exit 1 ;;
+          esac
+
+      - name: Download .deb
+        env:
+          DEB_URL: ${{ github.event.client_payload.deb_url }}
+        run: |
+          set -euo pipefail
+          mkdir -p _incoming
+          curl -fsSL --retry 3 -o _incoming/incoming.deb "$DEB_URL"
+          ls -la _incoming/
+
+      - name: Inspect .deb and place in pool
+        id: place
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y --no-install-recommends dpkg-dev >/dev/null
+          deb=_incoming/incoming.deb
+          pkg=$(dpkg-deb -f "$deb" Package)
+          ver=$(dpkg-deb -f "$deb" Version)
+          arch=$(dpkg-deb -f "$deb" Architecture)
+          [ -n "$pkg" ] && [ -n "$ver" ] && [ -n "$arch" ] || { echo "could not parse deb metadata"; exit 1; }
+          initial=$(printf '%s' "$pkg" | head -c1)
+          dest_dir="pool/main/${initial}/${pkg}"
+          dest_name="${pkg}_${ver}_${arch}.deb"
+          mkdir -p "$dest_dir"
+          # Evict older builds of the same package + same arch (different version).
+          # We deliberately keep different-arch builds so amd64 + arm64 can co-exist.
+          find "$dest_dir" -maxdepth 1 -type f -name "${pkg}_*_${arch}.deb" \
+              ! -name "$dest_name" -delete
+          mv "$deb" "$dest_dir/$dest_name"
+          rmdir _incoming
+          echo "pkg=$pkg"   >> "$GITHUB_OUTPUT"
+          echo "ver=$ver"   >> "$GITHUB_OUTPUT"
+          echo "arch=$arch" >> "$GITHUB_OUTPUT"
+          echo "dest=$dest_dir/$dest_name" >> "$GITHUB_OUTPUT"
+          echo "Placed: $dest_dir/$dest_name"
+          ls -la "$dest_dir/"
+
+      - name: Commit and push
+        env:
+          PKG: ${{ steps.place.outputs.pkg }}
+          VER: ${{ steps.place.outputs.ver }}
+          ARCH: ${{ steps.place.outputs.arch }}
+          REPO: ${{ github.event.client_payload.repo }}
+          TAG:  ${{ github.event.client_payload.tag }}
+        run: |
+          set -euo pipefail
+          git config user.name  "ra-yavuz-bot"
+          git config user.email "yavuzramazan1994@gmail.com"
+          git add pool/
+          if git diff --cached --quiet; then
+            echo "Nothing changed in the pool. Skipping commit."
+            exit 0
+          fi
+          git commit -m "Add ${PKG} ${VER} (${ARCH}) from ${REPO}@${TAG}"
+          # Push triggers publish.yml which rebuilds and deploys the index.
+          git push
