@@ -1,6 +1,8 @@
 # ra-yavuz Linux packages
 
-Personal Debian/Ubuntu apt repository for [ra-yavuz](https://github.com/ra-yavuz)'s Linux tools. Hosted as static files on GitHub Pages at **https://ra-yavuz.github.io/apt/**.
+> **Live repository:** [https://ra-yavuz.github.io/apt/](https://ra-yavuz.github.io/apt/)
+
+Personal Debian/Ubuntu apt repository for [ra-yavuz](https://github.com/ra-yavuz)'s Linux tools. Hosted as static files on GitHub Pages.
 
 ## Disclaimer / no warranty
 
