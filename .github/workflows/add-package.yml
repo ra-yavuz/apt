@@ -26,6 +26,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   add:
@@ -113,5 +114,19 @@ jobs:
             exit 0
           fi
           git commit -m "Add ${PKG} ${VER} (${ARCH}) from ${REPO}@${TAG}"
-          # Push triggers publish.yml which rebuilds and deploys the index.
           git push
+
+      - name: Trigger publish workflow
+        # GitHub does not trigger other workflows from a GITHUB_TOKEN-authored
+        # push (loop prevention), so the publish.yml's `on: push` won't fire
+        # from our commit above. Dispatch it explicitly.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          curl -fsSL -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/publish.yml/dispatches" \
+            -d '{"ref":"main"}'
+          echo "Dispatched publish.yml"
