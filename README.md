@@ -14,9 +14,12 @@ Personal Debian/Ubuntu apt repository for [ra-yavuz](https://github.com/ra-yavuz
 
 | Package | Source | Description |
 |---|---|---|
+| `herald` | [ra-yavuz/herald](https://github.com/ra-yavuz/herald) | Print a quote at the top of every new terminal and at login |
+| `hydra-llm` | [ra-yavuz/hydra-llm](https://github.com/ra-yavuz/hydra-llm) | Run local LLMs the easy way, with an OpenAI-compatible `/v1` endpoint |
+| `hydra-llm-plasma` | [ra-yavuz/hydra-llm](https://github.com/ra-yavuz/hydra-llm) | KDE Plasma 6 panel widget for `hydra-llm` |
 | `inhibit-charge` | [ra-yavuz/inhibit-charge](https://github.com/ra-yavuz/inhibit-charge) | Park your laptop battery at a target charge using the kernel's `inhibit-charge` mode |
-
-(more to follow as projects ship)
+| `lillycoder` | [ra-yavuz/lillycoder](https://github.com/ra-yavuz/lillycoder) | Local-first coder REPL with file and shell tools, talks to any OpenAI-compatible `/v1` endpoint |
+| `meowtrics` | [ra-yavuz/meowtrics](https://github.com/ra-yavuz/meowtrics) | Animated emoji tray pet that reacts to your machine's vital signs |
 
 ## Add the repository
 
