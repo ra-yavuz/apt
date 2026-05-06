@@ -114,7 +114,22 @@ jobs:
             exit 0
           fi
           git commit -m "Add ${PKG} ${VER} (${ARCH}) from ${REPO}@${TAG}"
-          git push
+          # Two add-package runs can race when a release ships multiple .debs.
+          # Retry with rebase if our push is rejected as non-fast-forward.
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "push ok on attempt $attempt"
+              break
+            fi
+            if [ "$attempt" = "5" ]; then
+              echo "giving up after 5 attempts" >&2
+              exit 1
+            fi
+            echo "push rejected (attempt $attempt); fetching and rebasing"
+            git fetch origin main
+            git rebase origin/main
+            sleep $((attempt * 2))
+          done
 
       - name: Trigger publish workflow
         # GitHub does not trigger other workflows from a GITHUB_TOKEN-authored
