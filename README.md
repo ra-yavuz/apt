@@ -21,7 +21,25 @@ Personal Debian/Ubuntu apt repository for [ra-yavuz](https://github.com/ra-yavuz
 | `lillycoder` | [ra-yavuz/lillycoder](https://github.com/ra-yavuz/lillycoder) | Local-first coder REPL with file and shell tools, talks to any OpenAI-compatible `/v1` endpoint |
 | `meowtrics` | [ra-yavuz/meowtrics](https://github.com/ra-yavuz/meowtrics) | Animated emoji tray pet that reacts to your machine's vital signs |
 
-## Add the repository
+## Add the repository and install
+
+### One-line setup + install
+
+Adds the signed repo if not already added, refreshes the package index, and installs the package. Idempotent, safe to re-run. Replace `<package>` with the package you want (e.g. `inhibit-charge`, `herald`, `meowtrics`, `lillycoder`, `hydra-llm`):
+
+```bash
+sudo bash -c 'set -e; install -m 0755 -d /etc/apt/keyrings && curl -fsSL https://ra-yavuz.github.io/apt/pubkey.gpg -o /etc/apt/keyrings/ra-yavuz.gpg && echo "deb [signed-by=/etc/apt/keyrings/ra-yavuz.gpg] https://ra-yavuz.github.io/apt stable main" > /etc/apt/sources.list.d/ra-yavuz.list && apt update && apt install -y <package>'
+```
+
+If you already added the repository earlier, all you need for any future package is:
+
+```bash
+sudo apt update && sudo apt install <package>
+```
+
+The `sudo apt update` step is required: without it, apt will not see new packages or new versions published to this repository.
+
+### Step by step
 
 ```bash
 # 1. Trust the signing key
@@ -33,7 +51,7 @@ curl -fsSL https://ra-yavuz.github.io/apt/pubkey.gpg \
 echo "deb [signed-by=/etc/apt/keyrings/ra-yavuz.gpg] https://ra-yavuz.github.io/apt stable main" \
   | sudo tee /etc/apt/sources.list.d/ra-yavuz.list
 
-# 3. Update and install
+# 3. Refresh the package index, then install (replace inhibit-charge with any package above)
 sudo apt update
 sudo apt install inhibit-charge
 ```

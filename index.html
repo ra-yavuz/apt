@@ -106,7 +106,27 @@
     <strong>No warranty.</strong> Packages here are provided <em>as is</em>, without warranty of any kind. They may write to low-level system interfaces (battery firmware, kernel sysfs, etc). The maintainer is not liable for any damage to your hardware, data, or system. By adding this repository, you accept full responsibility for any consequences. Read each package's README before installing.
   </div>
 
-  <h2>Add the repository</h2>
+  <h2>Add the repository and install</h2>
+
+  <h3>One line setup + install</h3>
+  <p>
+    Adds the signed repo if not already added, refreshes the package index, and installs the package.
+    Idempotent, safe to re-run. Replace <code>&lt;package&gt;</code> with the package you want
+    (e.g. <code>inhibit-charge</code>, <code>herald</code>, <code>meowtrics</code>,
+    <code>lillycoder</code>, <code>hydra-llm</code>):
+  </p>
+  <pre><code>sudo bash -c 'set -e; install -m 0755 -d /etc/apt/keyrings &amp;&amp; curl -fsSL https://ra-yavuz.github.io/apt/pubkey.gpg -o /etc/apt/keyrings/ra-yavuz.gpg &amp;&amp; echo "deb [signed-by=/etc/apt/keyrings/ra-yavuz.gpg] https://ra-yavuz.github.io/apt stable main" &gt; /etc/apt/sources.list.d/ra-yavuz.list &amp;&amp; apt update &amp;&amp; apt install -y &lt;package&gt;'</code></pre>
+
+  <p>
+    If you already added the repository earlier, all you need for any future package is:
+  </p>
+  <pre><code>sudo apt update &amp;&amp; sudo apt install &lt;package&gt;</code></pre>
+  <p>
+    The <code>sudo apt update</code> step is required: without it, apt will not see new packages or
+    new versions published to this repository.
+  </p>
+
+  <h3>Step by step</h3>
   <pre><code># 1. Trust the signing key
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://ra-yavuz.github.io/apt/pubkey.gpg \
@@ -116,7 +136,7 @@ curl -fsSL https://ra-yavuz.github.io/apt/pubkey.gpg \
 echo "deb [signed-by=/etc/apt/keyrings/ra-yavuz.gpg] https://ra-yavuz.github.io/apt stable main" \
   | sudo tee /etc/apt/sources.list.d/ra-yavuz.list
 
-# 3. Update and install
+# 3. Refresh the package index, then install (replace inhibit-charge with any package above)
 sudo apt update
 sudo apt install inhibit-charge</code></pre>
 
