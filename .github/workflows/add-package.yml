@@ -84,10 +84,11 @@ jobs:
           dest_dir="pool/main/${initial}/${pkg}"
           dest_name="${pkg}_${ver}_${arch}.deb"
           mkdir -p "$dest_dir"
-          # Evict older builds of the same package + same arch (different version).
-          # We deliberately keep different-arch builds so amd64 + arm64 can co-exist.
-          find "$dest_dir" -maxdepth 1 -type f -name "${pkg}_*_${arch}.deb" \
-              ! -name "$dest_name" -delete
+          # Retain every published .deb in the pool so users can pin to
+          # an old version with `apt install pkg=X.Y.Z-1`. Pool size is
+          # tiny (.debs are <100 KB) and full version history matters
+          # more than a small index. Storage cost at 100 releases per
+          # package is single-digit megabytes.
           mv "$deb" "$dest_dir/$dest_name"
           rmdir _incoming
           echo "pkg=$pkg"   >> "$GITHUB_OUTPUT"
