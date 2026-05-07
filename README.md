@@ -39,6 +39,8 @@ sudo apt update && sudo apt install <package>
 
 The `sudo apt update` step is required: without it, apt will not see new packages or new versions published to this repository.
 
+**Tested on Ubuntu (Linux only).** Packages should also work on Debian and any close Ubuntu derivative, and on **WSL2** Ubuntu / Debian (it is a Linux distro), with the caveat that some projects (e.g. `inhibit-charge`, `meowtrics`) need hardware sysfs or a Linux desktop tray that WSL2 does not provide. **macOS** is not a target for the apt repository: `apt` is not native to Darwin. macOS users should follow each project's per-project install path (e.g. `hydra-llm` runs under Docker Desktop, `lillycoder` installs from source via `pip`).
+
 ### Step by step
 
 ```bash

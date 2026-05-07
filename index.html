@@ -131,6 +131,18 @@
     new versions published to this repository.
   </p>
 
+  <p>
+    <strong>Tested on Ubuntu (Linux only).</strong> Packages should also work on
+    Debian and any close Ubuntu derivative, and on <strong>WSL2</strong> Ubuntu /
+    Debian (it is a Linux distro), with the caveat that some projects
+    (e.g. <code>inhibit-charge</code>, <code>meowtrics</code>) need hardware sysfs
+    or a Linux desktop tray that WSL2 does not provide. <strong>macOS</strong> is
+    not a target for the apt repository: <code>apt</code> is not native to Darwin.
+    macOS users should follow each project's per-project install path (e.g.
+    <code>hydra-llm</code> runs under Docker Desktop, <code>lillycoder</code>
+    installs from source via <code>pip</code>).
+  </p>
+
   <h3>Step by step</h3>
   <pre><code># 1. Trust the signing key
 sudo install -m 0755 -d /etc/apt/keyrings
