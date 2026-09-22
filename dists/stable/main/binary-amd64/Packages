@@ -1,5 +1,1828 @@
-Package: inhibit-charge
+Package: claude-rag-hook
 Version: 0.1.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG hook for Claude Code
+ Type "rag: <question>" in Claude Code; the hook walks back through
+ your cwd, looks for a per-folder LanceDB index, embeds the query,
+ retrieves the top-K relevant chunks, and prepends them to the prompt
+ as a context block before Claude sees it. Cheap, deterministic,
+ local-first.
+ .
+ Unlike MCP-driven local RAG (where the model decides when to retrieve)
+ the hook is keyword-triggered: the user types the trigger, the hook
+ retrieves; otherwise it is a no-op. Zero token overhead on prompts
+ that do not start with the trigger.
+ .
+ Ships with a fastembed embedder (lazy import; install via pip extras),
+ an OpenAI-compatible /v1/embeddings client, and an optional hydra-llm
+ interop layer that reuses an installed embedder catalog and per-folder
+ .hydra-index/ stores. A small per-user warm daemon keeps the embedder
+ loaded for sub-second retrieval.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ you index and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when the trigger fires. The author is not liable for any damage to
+ data, hardware, or system, or for the content of model output. Audit
+ what you index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.1.0-1_all.deb
+Size: 27866
+MD5sum: 1092c90dc93635f84be91b343ddee99c
+SHA256: 47eaf5fd214b9ad459610e2ef23289bad7d00176aa73bc2e44651885986048c5
+
+Package: claude-rag-hook
+Version: 0.2.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.2.0-1_all.deb
+Size: 33236
+MD5sum: 20f8be5bdbf0c72b7a1782d4e8f45836
+SHA256: bcc5dd89ddb31477cac987f8415404ccfb14f488eb34c2ffa0b6b059c183f828
+
+Package: claude-rag-hook
+Version: 0.2.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.2.1-1_all.deb
+Size: 33482
+MD5sum: 61eb91fb1a243d88a88cc3a8758cae36
+SHA256: 34fd3548a62aa994882c0cb78ac2e67353513b52c71a149e6eff53dab112b053
+
+Package: claude-rag-hook
+Version: 0.3.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.3.0-1_all.deb
+Size: 38312
+MD5sum: 97cfe179a257f01e0611bc565cc2f3ce
+SHA256: 4ac29f2d8281bb7e8fbae5f7b3ab824a8321312214510f83ea56ffa60b504aee
+
+Package: claude-rag-hook
+Version: 0.3.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.3.1-1_all.deb
+Size: 38978
+MD5sum: 15cecfd967376918fb71b49e3203a063
+SHA256: 746cf4795edabaa893d0c6da13ed45b2f7be724ef1b5576b523d29f5e76e271c
+
+Package: claude-rag-hook
+Version: 0.3.2-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.3.2-1_all.deb
+Size: 40528
+MD5sum: c391c179c923f4a79e98770541c6151d
+SHA256: 5a07429bbc3e45dd08987171bd9e2c1445b00e6233cf0ce2184cd1571df47475
+
+Package: claude-rag-hook
+Version: 0.3.3-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.3.3-1_all.deb
+Size: 40954
+MD5sum: d65821caacbeb47ee518fe02653ed25c
+SHA256: 11fe69812abfd0fe578de56c28c6274bc11817c0e905d0d4d16a247dcb3c66db
+
+Package: claude-rag-hook
+Version: 0.4.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.4.0-1_all.deb
+Size: 54716
+MD5sum: 5bf8cac80c51c2229e4eae58454136b4
+SHA256: 19e81d6955cc9ccaf959ccb812373d2dfe649a8b77477aee80abfdfb32ec0891
+
+Package: claude-rag-hook
+Version: 0.4.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.4.1-1_all.deb
+Size: 55140
+MD5sum: 32ea83dc80f3e47b36b71dce07f8e813
+SHA256: c7dda707a711f5c6452eb631c6cb1a9a6fdaa7ced684c2e9a049ef976e0da874
+
+Package: claude-rag-hook
+Version: 0.5.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.5.0-1_all.deb
+Size: 56556
+MD5sum: 07820ecd9da50666153fb42b1c135c33
+SHA256: 8064f22c746aa30a43ba240e25a1d808601aeb5c986e93bf74c1f6dd3c46d2e5
+
+Package: claude-rag-hook
+Version: 0.6.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.6.0-1_all.deb
+Size: 69384
+MD5sum: fe6c76a8a4486fc0d7119d373cebe444
+SHA256: a40cceea7bc25e7de9580eb2799fdbacabb6661cd728ee526a87ce23c4d1e743
+
+Package: claude-rag-hook
+Version: 0.6.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/claude-rag-hook/
+Description: keyword-triggered local RAG inside Claude Code
+ Type "rag: <question>" inside Claude Code; this hook embeds the query,
+ retrieves the top relevant chunks from a local LanceDB index of your
+ project folder, and prepends them to the prompt before Claude sees it.
+ Local-first; the model never has to "decide" whether to retrieve, so
+ there is no MCP round trip and no per-prompt token overhead on prompts
+ that do not start with the trigger.
+ .
+ Auto-indexing on first use: the first "rag:" inside a project folder
+ (one with a .git, pyproject.toml, package.json, or similar marker)
+ fork-detaches a background indexer; the next "rag:" retrieves
+ normally. Hard refusals on $HOME, /etc, /var, etc., and a 20k-file /
+ 500MB cap protect against accidental indexing of large or sensitive
+ trees.
+ .
+ Wires itself into Claude Code on apt install by merging an entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks up the hook on their next Claude Code session; no per-user
+ setup. Removing the package removes the entry.
+ .
+ The fastembed embedder (the default) is not packaged for Debian; it
+ is fetched on first use via pip if missing. To pre-install:
+   pip install --user fastembed lancedb pyarrow
+ Or pick a different embedder backend (OpenAI-compatible local server,
+ hydra-llm interop) in ~/.config/claude-rag-hook/config.yaml.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.claude-rag-index/. Retrieved chunks are sent to Anthropic
+ when "rag:" fires. The author is not liable for any damage to data,
+ hardware, system, or for the content of model output. Audit what you
+ index. See /usr/share/doc/claude-rag-hook/README.md.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.6.1-1_all.deb
+Size: 70492
+MD5sum: ed6f5b092071cfea224add0b212c0225
+SHA256: f3ab948a257da4a3c6c6395fd1e2eff7c0f1f61299f6ab27b5434d2a965eebd3
+
+Package: claude-rag-hook
+Version: 0.7.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-rag-hooks (>= 0.1.0)
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/hydra-rag-hooks/
+Description: Transitional package - renamed to hydra-rag-hooks
+ claude-rag-hook has been renamed to hydra-rag-hooks. The new package
+ supports both Claude Code AND OpenAI's Codex CLI from one apt install,
+ with the same hooks, retrieval pipeline, and crh operator CLI.
+ .
+ This v0.7.0 transitional package depends on hydra-rag-hooks so that
+ `apt update` installs the new package automatically. After
+ installation you can run `apt remove claude-rag-hook` to drop
+ this transitional name; hydra-rag-hooks remains installed and
+ handles the same workload, including auto-migration of existing
+ .claude-rag-index/ folders to the unified .hydra-index/ name.
+ .
+ See https://ra-yavuz.github.io/hydra-rag-hooks/ for the new project.
+Filename: pool/main/c/claude-rag-hook/claude-rag-hook_0.7.0-1_all.deb
+Size: 11704
+MD5sum: e0c09b50b834488de926abdb70885b2b
+SHA256: 23ac3785ccda61a8f53020c17d50b89706540fb317c8dc2c8f8e16f3a49d11a3
+
+Package: edgecall
+Version: 0.1.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-fastapi, python3-uvicorn, python3-httpx, python3-pydantic
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/edgecall
+Description: route plain-language requests to your functions with a weak local model
+ edgecall is a small self-hosted, OpenAI-compatible API. You POST a sentence
+ and a deliberately weak local model (phi3-class, the kind that runs on a
+ Raspberry Pi or a phone) reads a short paginated menu of your registered
+ functions, picks one, and edgecall runs it and returns the result.
+ .
+ The model never sees the whole function list at once: functions are shown a
+ few at a time as a numbered menu, paged through with a "next" option. There
+ is no embedding model and no index to maintain. edgecall does not host a
+ model; it talks to any OpenAI-compatible endpoint you already run. Add a
+ function by dropping a Python file into the functions directory.
+ .
+ DISCLAIMER: provided AS IS, WITHOUT WARRANTY OF ANY KIND. A weak model may
+ route a request to the wrong function and edgecall will run it; do not rely
+ on it for safety-critical actions. The author is not liable for any damage
+ to hardware, data, or system, or for model output or function results. See
+ /usr/share/doc/edgecall/README.md for the full disclaimer.
+Filename: pool/main/e/edgecall/edgecall_0.1.0-1_all.deb
+Size: 18278
+MD5sum: 781a68374a892aff1ca4ef081a6b2fd7
+SHA256: 9c1c193c0bfe6b9e236c94735445c88659f975e50de25a4822db487c98d885db
+
+Package: herald
+Version: 0.1.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: bash (>= 4.0), systemd, curl, python3, coreutils
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/herald
+Description: print a quote at the top of every new terminal and at login
+ herald is a small Linux daemon and CLI that prints a daily quote. It
+ supports two display surfaces: a terminal greeting at the top of every
+ new interactive shell (/etc/profile.d/), and a login MOTD via
+ /etc/update-motd.d/. Both are off by default; toggle with 'herald
+ terminal', 'herald motd', or 'herald all'.
+ .
+ Quotes are fetched from zenquotes.io with a 1.5s timeout, with a
+ fallback to a bundled local pool of about 30 curated quotes. The
+ cache is refreshed by a systemd timer every three hours by default;
+ configurable via 'herald set-refresh <hours>'.
+ .
+ An optional /etc/herald.prefix file lets you prepend custom text
+ above the quote.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Quotes are fetched from a
+ third-party service. The author is not liable for the content of
+ fetched quotes, for events outside the author's control, or for any
+ damage caused by installing or running this software. See README for
+ full text.
+Filename: pool/main/h/herald/herald_0.1.0-1_all.deb
+Size: 11534
+MD5sum: 410b6491428da07ae994e7cf5abed766
+SHA256: 2218ff5c2bc8a043b2d8b20fc5bdfeb5cd11aa49dd3c931135a6f4995bf18ee0
+
+Package: hydra-llm-plasma
+Version: 0.1.10-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.1.10-1), plasma-workspace (>= 6.0), qml6-module-qtquick-controls, qml6-module-org-kde-kirigami, qml6-module-org-kde-plasma-components
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.1.10-1_all.deb
+Size: 13390
+MD5sum: 33dab307992cceff0abc439956d1174b
+SHA256: 24c0520a7968662c5ca37817efd5e456009ad0d572518990a3df41c2c6dab1a8
+
+Package: hydra-llm-plasma
+Version: 0.1.12-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.1.12-1), plasma-workspace (>= 6.0), qml6-module-qtquick-controls, qml6-module-org-kde-kirigami, qml6-module-org-kde-plasma-components
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.1.12-1_all.deb
+Size: 13392
+MD5sum: 66a381dd736f1a140594c89583f21851
+SHA256: bc351d651c42bba9c1c41660b2e11ed9e3d0c2df894548a68706fa44bd2d9384
+
+Package: hydra-llm-plasma
+Version: 0.2.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.0-1), plasma-workspace (>= 6.0), qml6-module-qtquick-controls, qml6-module-org-kde-kirigami, qml6-module-org-kde-plasma-components
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.0-1_all.deb
+Size: 13802
+MD5sum: 41df37ab48358fcc936c6bde08dc090e
+SHA256: 7329382fe2f21cd779f023c68e57557fcc52d69e36d5033cb74580584df9c637
+
+Package: hydra-llm-plasma
+Version: 0.2.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.1-1), plasma-workspace (>= 6.0), qml6-module-qtquick-controls, qml6-module-org-kde-kirigami, qml6-module-org-kde-plasma-components
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.1-1_all.deb
+Size: 17672
+MD5sum: e309c32e3b90344fa568687ba679416e
+SHA256: 2e893a43d19fd7155333e5cc8467ea428dffa346125cccdd516b2390b8ccb7ac
+
+Package: hydra-llm-plasma
+Version: 0.2.10-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.10-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.10-1_all.deb
+Size: 20650
+MD5sum: d470806b947f3a7debf310a8386984dd
+SHA256: 85fbc8a3c9ad0286fcb5f05e544f8bd499874e23ff2da0fc062f8120d915338b
+
+Package: hydra-llm-plasma
+Version: 0.2.11-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.11-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.11-1_all.deb
+Size: 21268
+MD5sum: f421ab6c142f20e6aad9cbe4ccf4d551
+SHA256: 32885c870c50ec35407460b46fd09049d275a35dff356408b252355152437a0c
+
+Package: hydra-llm-plasma
+Version: 0.2.12-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.12-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.12-1_all.deb
+Size: 21266
+MD5sum: 92c2e7a15b768e9520dc8573619268a6
+SHA256: 6ea8f1459d9c3f99e021f7c6f3ed4830b30b03df8c531f760cb17a725a7a61a4
+
+Package: hydra-llm-plasma
+Version: 0.2.13-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.13-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.13-1_all.deb
+Size: 21632
+MD5sum: 5f00572a72f5ffb4d2592aa4e31e4426
+SHA256: bcf83507043089d964ff00533a489f9a3c8842e8b872870f9541c30607d6a9b0
+
+Package: hydra-llm-plasma
+Version: 0.2.2-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.2-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.2-1_all.deb
+Size: 17682
+MD5sum: abcf021567294178f58ba2da3fa73a1c
+SHA256: fdf6cbc8df8c73e58a4c5bf985150eacb171031a8ab87c0f314e83d2a0e8b1c2
+
+Package: hydra-llm-plasma
+Version: 0.2.3-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.3-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.3-1_all.deb
+Size: 18480
+MD5sum: 3b5ec7a45edd473e02e0892907399f62
+SHA256: a48b8ad85c09d0cdb859583ddaf169208233a47c737a23a6550f57873eccd6d8
+
+Package: hydra-llm-plasma
+Version: 0.2.4-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.4-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.4-1_all.deb
+Size: 20074
+MD5sum: 1ff844cd62e9911c9b965150e7b3fcdb
+SHA256: 02614eab851252772f7a03a62f6e536eeed19da7266452cf8dbcbf259c8d7add
+
+Package: hydra-llm-plasma
+Version: 0.2.5-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.5-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.5-1_all.deb
+Size: 20634
+MD5sum: 52cddac8b043d4e4f9652f3ba935394b
+SHA256: 4f6ef126b8624ce3c025d08bd826e2dc4f724b79a1c9d835c2b70fe0f693752b
+
+Package: hydra-llm-plasma
+Version: 0.2.6-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.6-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.6-1_all.deb
+Size: 20648
+MD5sum: 7b3b770861894246171e30cfd567f482
+SHA256: 724c20d74b9ed94fba191fe4742b94c378303be9d414b8b19babd5a632a1c5b3
+
+Package: hydra-llm-plasma
+Version: 0.2.7-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.7-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.7-1_all.deb
+Size: 20650
+MD5sum: 444d0d2579629901287717db0f6dd8e8
+SHA256: 5197b01c0b8707e4c433d0267650a72d24046b445d20535fcdbc34412be1c6d8
+
+Package: hydra-llm-plasma
+Version: 0.2.8-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.8-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.8-1_all.deb
+Size: 20648
+MD5sum: c16affb84a5c3185d957248f4094c868
+SHA256: 22f84fe9160af71095468716bf4434b00269d9cc62fb6097373840bbe5a21c99
+
+Package: hydra-llm-plasma
+Version: 0.2.9-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.2.9-1)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma/hydra-llm-plasma_0.2.9-1_all.deb
+Size: 20650
+MD5sum: 042897d24d63c71b1cfab844069864e6
+SHA256: dffbf1dfe9cbdf07e06358815554383d9f73735940a08d472f3e6827ade0b447
+
+Package: hydra-llm-plasma
+Version: 0.1.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: hydra-llm (>= 0.1.0-1), plasma-workspace (>= 6.0), qml6-module-qtquick-controls, qml6-module-org-kde-kirigami, qml6-module-org-kde-plasma-components
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: KDE Plasma 6 panel widget for hydra-llm
+ A panel widget that lets you start, stop, and chat with local LLM model
+ servers managed by hydra-llm.
+ .
+ Features: HAL 9000 inspired animated indicator (breath rate scales with
+ system load), per-model start/stop/chat/logs buttons, live CPU/RAM/GPU/
+ VRAM dots in the popup, inline log console, and a real-terminal chat
+ spawner that picks the first available emulator from konsole, gnome-
+ terminal, alacritty, kitty, xfce4-terminal, xterm.
+ .
+ Requires the hydra-llm CLI to be installed.
+Filename: pool/main/h/hydra-llm-plasma_0.1.0-1_all.deb
+Size: 11086
+MD5sum: ec337d586f722a08c0e471549928c098
+SHA256: b2e5501c33dab94a3e662bc8177155d0bc00a999486f7ebcf72377b16bed6614
+
+Package: hydra-llm
+Version: 0.1.10-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf and downloads multi-gigabyte files. The author is not
+ liable for any damage to hardware, data, or system, or for the content
+ of model output. See /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.1.10-1_all.deb
+Size: 42580
+MD5sum: 2ba1e2635574bcc14e046a85f239c517
+SHA256: e7f5a1ebfb91d38a73392e24bef6641ef6c29643b54e588ca84d863a4415ee01
+
+Package: hydra-llm
+Version: 0.1.12-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf and downloads multi-gigabyte files. The author is not
+ liable for any damage to hardware, data, or system, or for the content
+ of model output. See /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.1.12-1_all.deb
+Size: 46832
+MD5sum: a9b9017006f8ddd8d8f4e48d4c5ed351
+SHA256: 25dcb91e624ea2155a7d5c65c25c84b5182905e4f8cfd2dacc5d54b4b281df5d
+
+Package: hydra-llm
+Version: 0.2.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.0-1_all.deb
+Size: 74396
+MD5sum: 6f5d225a524797ed14314f337ac4c734
+SHA256: 61546bf133027cf03224bd45f43a4c29a9493aefb3bae69fd57891ae5ed89138
+
+Package: hydra-llm
+Version: 0.2.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.1-1_all.deb
+Size: 81114
+MD5sum: ecc665e692c5ebc22a5ee7aedb7a163b
+SHA256: 89ff9a8b9511d498698896fba7522241f6dff1eabc8a099015536052ad467bc7
+
+Package: hydra-llm
+Version: 0.2.10-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.10-1_all.deb
+Size: 100110
+MD5sum: d449885815533577c438ea4a5ce04a7c
+SHA256: 0932b31791c750308df4d818c6554884a31747a4f65d9eab5e3ce90c737d43f9
+
+Package: hydra-llm
+Version: 0.2.11-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.11-1_all.deb
+Size: 104084
+MD5sum: e7230e90e5c2a4e749939674593ed788
+SHA256: 6909bfb12b600a92b17937403b1b2de310ba2d40d9ee6dc78c8d4149203f7327
+
+Package: hydra-llm
+Version: 0.2.12-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.12-1_all.deb
+Size: 107818
+MD5sum: 1e04e616f49240372865f19e2eeaa73c
+SHA256: 120cfe5206b021d4a22434f52421057fb46636c92bb73ac8d6a6a1091bae24ce
+
+Package: hydra-llm
+Version: 0.2.13-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.13-1_all.deb
+Size: 110808
+MD5sum: 9826351688b576e711bd13d18872c9a0
+SHA256: 440e90b9e00abb947f38a507a98a55dd6c99b01dea9778559faee759ba1680e7
+
+Package: hydra-llm
+Version: 0.2.2-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.2-1_all.deb
+Size: 81116
+MD5sum: 90f3090eccb9d7deb6ef120f76f0b07e
+SHA256: 0a56851e45d96492383b6c293e074285a44c3718861d37729cb3f3cc53291f32
+
+Package: hydra-llm
+Version: 0.2.3-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.3-1_all.deb
+Size: 83874
+MD5sum: f297a2f876d5c421a093554bf2010f6c
+SHA256: 008ba7b75f3588df9ba0702f363f021853163613028c5d5ee50b723a7b18dd5e
+
+Package: hydra-llm
+Version: 0.2.4-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.4-1_all.deb
+Size: 85958
+MD5sum: 6a4f2236978616f3d9de75097d0c661f
+SHA256: 4c278d167b88fe73671d0737111cb1dc565a97edb3c4dc33c02fe2d05296029a
+
+Package: hydra-llm
+Version: 0.2.5-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.5-1_all.deb
+Size: 88074
+MD5sum: 039d6792caa661d79b7ad1369f6cef39
+SHA256: 0d70e1a38ea8f6a1f927ce7d71a081dc29b04dae860e20f75be1017b00b6c011
+
+Package: hydra-llm
+Version: 0.2.6-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.6-1_all.deb
+Size: 95056
+MD5sum: ac664159648800ec65e7fa1984d35d3b
+SHA256: 86487544b135d3d39a1ff948ac0d95e25b871f5a8c38f888d2d14fa1e36f6bf2
+
+Package: hydra-llm
+Version: 0.2.7-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.7-1_all.deb
+Size: 95958
+MD5sum: f2cddb214da844eea838086ea78db49a
+SHA256: 4b46005c2dd30b1edba667256f3f6a950fa06bd516374758438dc9ce169641bd
+
+Package: hydra-llm
+Version: 0.2.8-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.8-1_all.deb
+Size: 96806
+MD5sum: 258c685b32aee66fca03c600bca523c1
+SHA256: ada9cd3daaaabe767e98d13bc141c778ba774dc5578d2a3c8cd0332f320ea66a
+
+Package: hydra-llm
+Version: 0.2.9-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-pathspec, python3-numpy, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI, with RAG)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ RAG (retrieval-augmented generation): index any folder with
+ `hydra-llm index <path>`, query with `hydra-llm query "..."`, or chat
+ with retrieval via `hydra-llm chat <model> --rag <path>`. Embedders run
+ in their own llama.cpp containers on a separate port range. LanceDB
+ stores vectors per-folder. Code and prose use separate embedders, with
+ Reciprocal Rank Fusion across both. Cross-folder federated query and
+ per-store tags supported.
+ .
+ Catalog-bound bundles: `hydra-llm create <model> <persona.md> <id>
+ --rag-index <path>` bakes a model + persona + corpus into one alias.
+ `hydra-llm chat <id>` then runs everything without flags.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf, downloads multi-gigabyte files, and reads files under
+ directories you index. The author is not liable for any damage to
+ hardware, data, or system, or for the content of model output. See
+ /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm/hydra-llm_0.2.9-1_all.deb
+Size: 97056
+MD5sum: 598b6f81284e76842e2a1ec15b7d4cce
+SHA256: d6a732039947af33c6d285ab4d79ab5cae4217cadc4a8ec6a00bfcc0022fedc7
+
+Package: hydra-llm
+Version: 0.1.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, docker.io | docker-ce | podman-docker, bash (>= 4.0), curl, git
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydra-llm
+Description: run local LLMs the easy way (CLI)
+ hydra-llm is a single-command interface for running large language models
+ locally with llama.cpp packaged in Docker. Includes a curated catalog of
+ community-quantized GGUFs that download anonymously, a hardware doctor
+ that recommends models per system tier, persona files for repeatable chat
+ personalities, persistent chat sessions, and a JSON status API used by
+ the companion Plasma widget.
+ .
+ Quick start: hydra-llm setup ; hydra-llm chat smollm2-135m
+ .
+ DISCLAIMER: provided AS IS, no warranty. Runs LLMs and Docker containers
+ on your behalf and downloads multi-gigabyte files. The author is not
+ liable for any damage to hardware, data, or system, or for the content
+ of model output. See /usr/share/doc/hydra-llm/README.md for full text.
+Filename: pool/main/h/hydra-llm_0.1.0-1_all.deb
+Size: 32812
+MD5sum: 3c44b15cd716bab823fa249978320c32
+SHA256: e74a264d14d64016aa3da8aa435d0e71f87c1d4142d60938f7c6a2fdeaf569c0
+
+Package: hydra-rag-hooks
+Version: 0.1.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/hydra-rag-hooks/
+Description: keyword-triggered local RAG hooks for Claude Code AND Codex CLI
+ Type "rag <question>" inside either Claude Code or OpenAI's Codex CLI;
+ the hook embeds the query, retrieves the top relevant chunks from a
+ per-folder LanceDB index, and prepends them to the prompt before the
+ model sees it. Local-first, deterministic, zero token overhead on
+ prompts that do not start with the trigger.
+ .
+ Two CLIs, one shared index. The same .hydra-index/ folder works for
+ Claude Code AND Codex CLI. The folder name is also what the sibling
+ hydra-llm project uses, so all three tools cooperate on the same
+ store. Existing claude-rag-hook v0.6 indexes (.claude-rag-index/)
+ are auto-renamed in place on first run.
+ .
+ Claude Code install: zero-touch. apt install merges a hook entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks it up on their next Claude Code session.
+ Codex CLI install: per-user opt-in. After apt install, run
+ "codex plugin add /usr/lib/hydra-rag-hooks/codex-plugin" once per user.
+ .
+ The fastembed embedder (default) is not packaged for Debian; install
+ it via pip if missing: pip install --user fastembed lancedb pyarrow.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.hydra-index/. Retrieved chunks are sent to the third-party
+ LLM provider (Anthropic for Claude Code, OpenAI for Codex CLI) when
+ "rag" fires. The author is not liable for any damage. Audit what you
+ index. See /usr/share/doc/hydra-rag-hooks/README.md.
+Filename: pool/main/h/hydra-rag-hooks/hydra-rag-hooks_0.1.0-1_all.deb
+Size: 72696
+MD5sum: a2c9c2e8f7d6fd3160e16ad6d727223f
+SHA256: 661343bd1bd5919000739dcef4c54ff1a53c0b5db65ae4e15ecf218039c63edb
+
+Package: hydra-rag-hooks
+Version: 0.1.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/hydra-rag-hooks/
+Description: keyword-triggered local RAG hooks for Claude Code AND Codex CLI
+ Type "rag <question>" inside either Claude Code or OpenAI's Codex CLI;
+ the hook embeds the query, retrieves the top relevant chunks from a
+ per-folder LanceDB index, and prepends them to the prompt before the
+ model sees it. Local-first, deterministic, zero token overhead on
+ prompts that do not start with the trigger.
+ .
+ Two CLIs, one shared index. The same .hydra-index/ folder works for
+ Claude Code AND Codex CLI. The folder name is also what the sibling
+ hydra-llm project uses, so all three tools cooperate on the same
+ store. Existing claude-rag-hook v0.6 indexes (.claude-rag-index/)
+ are auto-renamed in place on first run.
+ .
+ Claude Code install: zero-touch. apt install merges a hook entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks it up on their next Claude Code session.
+ Codex CLI install: per-user opt-in. After apt install, run
+ "codex plugin add /usr/lib/hydra-rag-hooks/codex-plugin" once per user.
+ .
+ The fastembed embedder (default) is not packaged for Debian; install
+ it via pip if missing: pip install --user fastembed lancedb pyarrow.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.hydra-index/. Retrieved chunks are sent to the third-party
+ LLM provider (Anthropic for Claude Code, OpenAI for Codex CLI) when
+ "rag" fires. The author is not liable for any damage. Audit what you
+ index. See /usr/share/doc/hydra-rag-hooks/README.md.
+Filename: pool/main/h/hydra-rag-hooks/hydra-rag-hooks_0.1.1-1_all.deb
+Size: 73162
+MD5sum: 5068cea49b83376751bf3592560f488f
+SHA256: d9c787a4226c566004639361105d4f57a141276691e3541cec7dba1153af25d7
+
+Package: hydra-rag-hooks
+Version: 0.1.2-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-yaml, python3-numpy, python3-pathspec
+Section: utils
+Priority: optional
+Homepage: https://ra-yavuz.github.io/hydra-rag-hooks/
+Description: keyword-triggered local RAG hooks for Claude Code AND Codex CLI
+ Type "rag <question>" inside either Claude Code or OpenAI's Codex CLI;
+ the hook embeds the query, retrieves the top relevant chunks from a
+ per-folder LanceDB index, and prepends them to the prompt before the
+ model sees it. Local-first, deterministic, zero token overhead on
+ prompts that do not start with the trigger.
+ .
+ Two CLIs, one shared index. The same .hydra-index/ folder works for
+ Claude Code AND Codex CLI. The folder name is also what the sibling
+ hydra-llm project uses, so all three tools cooperate on the same
+ store. Existing claude-rag-hook v0.6 indexes (.claude-rag-index/)
+ are auto-renamed in place on first run.
+ .
+ Claude Code install: zero-touch. apt install merges a hook entry into
+ /etc/claude-code/managed-settings.json. Every user on the machine
+ picks it up on their next Claude Code session.
+ Codex CLI install: per-user opt-in. After apt install, run
+ "codex plugin add /usr/lib/hydra-rag-hooks/codex-plugin" once per user.
+ .
+ The fastembed embedder (default) is not packaged for Debian; install
+ it via pip if missing: pip install --user fastembed lancedb pyarrow.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Reads files inside any folder
+ it indexes and stores chunked text plus embeddings of those files at
+ <folder>/.hydra-index/. Retrieved chunks are sent to the third-party
+ LLM provider (Anthropic for Claude Code, OpenAI for Codex CLI) when
+ "rag" fires. The author is not liable for any damage. Audit what you
+ index. See /usr/share/doc/hydra-rag-hooks/README.md.
+Filename: pool/main/h/hydra-rag-hooks/hydra-rag-hooks_0.1.2-1_all.deb
+Size: 73192
+MD5sum: 87669df480486fac74d5a6c84fa9e3f9
+SHA256: 0b64983ff86294035135279fcded72f7f6f475eaa022a6d91e0f5a3710ce9cf6
+
+Package: hydracoder
+Version: 0.1.3-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-websockets, lillycoder, hydra-llm
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/hydracoder
+Description: local-AI development orchestrator with a web UI
+ hydracoder turns a project goal into a task graph and drives local models to
+ build it: a planner decomposes the goal, a scheduler routes each task to a
+ right-sized local model, a reviewer checks each result, and an append-only
+ journal makes a crash or a full context window recoverable. It runs entirely
+ on local models via hydra-llm, using lillycoder as the per-task agent loop.
+ A dark web UI shows each model as a live terminal and a persistent chat box
+ lets you steer the run in plain language.
+ .
+ Built so development can continue on local hardware when hosted AI becomes
+ too expensive to use.
+ .
+ DISCLAIMER: provided AS IS, WITHOUT WARRANTY OF ANY KIND. hydracoder runs
+ local models that read, write, and delete files in a workspace and run shell
+ commands on your machine. You alone are responsible for any damage to your
+ data, hardware, or system. By installing you accept all risk. See
+ /usr/share/doc/hydracoder/README.md for the full disclaimer.
+Filename: pool/main/h/hydracoder/hydracoder_0.1.3-1_all.deb
+Size: 31750
+MD5sum: 0733c34d4522479b18ee0b52174825ab
+SHA256: 28d2bbb32e4691cd35c7b94f6c0515087614d2be1ada672d5bd98a5add37c96f
+
+Package: inhibit-charge
+Version: 0.5.0-1
 Architecture: all
 Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
 Depends: bash (>= 4.0), systemd, udev, coreutils
@@ -12,7 +1835,7 @@ Description: park laptop battery at a target charge level
  tools (TLP, GNOME, KDE), the battery does not trickle-cycle: it sits idle
  while AC powers the system, eliminating wear from repeated mini-cycles.
  .
- Two modes are exposed via the power-mode command: home parks the battery
+ Two modes are exposed via the inhibit-charge command: home parks the battery
  at a target percentage on AC; travel charges fully to 100%.
  .
  Requires kernel >= 5.17 and hardware that exposes inhibit-charge in
@@ -23,8 +1846,323 @@ Description: park laptop battery at a target charge level
  DISCLAIMER: provided AS IS, no warranty. The author is not liable for any
  damage to battery, hardware, or data. By installing you accept full
  responsibility. See /usr/share/doc/inhibit-charge/README.md for full text.
-Filename: pool/main/i/inhibit-charge/inhibit-charge_0.1.0-1_all.deb
-Size: 8634
-MD5sum: 3017f9a43deb0504f020604425171035
-SHA256: 0e155223716836277014208929364e9673ca60a0e4688a5c1fa788aef2731bf3
+Filename: pool/main/i/inhibit-charge/inhibit-charge_0.5.0-1_all.deb
+Size: 15442
+MD5sum: e26d391e7098c3505373aa624dc5ad69
+SHA256: 88d15778c20cb1a86e66e0b016abdaea28e18c34a06783304f70055fa891a1e9
+
+Package: inhibit-charge
+Version: 0.5.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: bash (>= 4.0), systemd, udev, coreutils
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/inhibit-charge
+Description: park laptop battery at a target charge level
+ inhibit-charge holds your laptop battery at a target percentage when on AC,
+ using the kernel's charge_behaviour=inhibit-charge mode. Unlike threshold-only
+ tools (TLP, GNOME, KDE), the battery does not trickle-cycle: it sits idle
+ while AC powers the system, eliminating wear from repeated mini-cycles.
+ .
+ Two modes are exposed via the inhibit-charge command: home parks the battery
+ at a target percentage on AC; travel charges fully to 100%.
+ .
+ Requires kernel >= 5.17 and hardware that exposes inhibit-charge in
+ /sys/class/power_supply/BAT*/charge_behaviour. Tier-1 supported: ThinkPads
+ (thinkpad_acpi), Chromebooks (cros_ec). The daemon refuses to start on
+ unsupported hardware with a clear error.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The author is not liable for any
+ damage to battery, hardware, or data. By installing you accept full
+ responsibility. See /usr/share/doc/inhibit-charge/README.md for full text.
+Filename: pool/main/i/inhibit-charge/inhibit-charge_0.5.1-1_all.deb
+Size: 16136
+MD5sum: 3ad853ec95ec34afb67b73d8fc954dd9
+SHA256: e6b9e13412ed47918f52be7d8694e245c62cd53ff8e12f6ea3e7761659ff92e9
+
+Package: inhibit-charge
+Version: 0.5.2-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: bash (>= 4.0), systemd, udev, coreutils
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/inhibit-charge
+Description: park laptop battery at a target charge level
+ inhibit-charge holds your laptop battery at a target percentage when on AC,
+ using the kernel's charge_behaviour=inhibit-charge mode. Unlike threshold-only
+ tools (TLP, GNOME, KDE), the battery does not trickle-cycle: it sits idle
+ while AC powers the system, eliminating wear from repeated mini-cycles.
+ .
+ Two modes are exposed via the inhibit-charge command: home parks the battery
+ at a target percentage on AC; travel charges fully to 100%.
+ .
+ Requires kernel >= 5.17 and hardware that exposes inhibit-charge in
+ /sys/class/power_supply/BAT*/charge_behaviour. Tier-1 supported: ThinkPads
+ (thinkpad_acpi), Chromebooks (cros_ec). The daemon refuses to start on
+ unsupported hardware with a clear error.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The author is not liable for any
+ damage to battery, hardware, or data. By installing you accept full
+ responsibility. See /usr/share/doc/inhibit-charge/README.md for full text.
+Filename: pool/main/i/inhibit-charge/inhibit-charge_0.5.2-1_all.deb
+Size: 16838
+MD5sum: 4538cb48d7e141e81a2f5505aabc675e
+SHA256: e048107c100608a29798194ccfa760bf23d169b85dd48adec9d1f6e67e2f9c9a
+
+Package: lillycoder
+Version: 0.2.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-httpx, python3-prompt-toolkit, python3-rich, python3-pydantic
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/lillycoder
+Description: local-first coder REPL with file and shell tools
+ lillycoder drops you into a chat REPL inside any folder. The model on the
+ other end can read, write, and edit files, run shell commands, install
+ packages, and grep your project. It talks to any OpenAI-compatible /v1
+ endpoint, so you pair it with whichever local LLM server you already use
+ (llama.cpp, ollama, LM Studio, etc.). No cloud, no API key, no telemetry.
+ .
+ Every mutating action is gated. Hard-banned commands (sudo, rm -rf /,
+ mkfs, fork bombs) are refused even with --bypass-permissions.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The LLM can read, write, and
+ delete files in the current working directory and run shell commands.
+ You alone are responsible for any damage. By installing you accept full
+ risk. See /usr/share/doc/lillycoder/README.md for the full disclaimer.
+Filename: pool/main/l/lillycoder/lillycoder_0.2.0-1_all.deb
+Size: 49606
+MD5sum: 226bbdc24e564250136c2c47fa662709
+SHA256: 97a3386c68755bf916261271ee3d72f9ca1d48df3edacaf5f796fd3068febd00
+
+Package: lillycoder
+Version: 0.2.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-httpx, python3-prompt-toolkit, python3-rich, python3-pydantic
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/lillycoder
+Description: local-first coder REPL with file and shell tools
+ lillycoder drops you into a chat REPL inside any folder. The model on the
+ other end can read, write, and edit files, run shell commands, install
+ packages, and grep your project. It talks to any OpenAI-compatible /v1
+ endpoint, so you pair it with whichever local LLM server you already use
+ (llama.cpp, ollama, LM Studio, etc.). No cloud, no API key, no telemetry.
+ .
+ Every mutating action is gated. Hard-banned commands (sudo, rm -rf /,
+ mkfs, fork bombs) are refused even with --bypass-permissions.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The LLM can read, write, and
+ delete files in the current working directory and run shell commands.
+ You alone are responsible for any damage. By installing you accept full
+ risk. See /usr/share/doc/lillycoder/README.md for the full disclaimer.
+Filename: pool/main/l/lillycoder/lillycoder_0.2.1-1_all.deb
+Size: 51448
+MD5sum: 3d4f1421d49198ab24cc9025ecb60a5c
+SHA256: 52c7e67c60fa2ddc6362336a5580b61ba59e81dfdb6814fe6544f6d225a0d336
+
+Package: lillycoder
+Version: 0.2.2-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-httpx, python3-prompt-toolkit, python3-rich, python3-pydantic
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/lillycoder
+Description: local-first coder REPL with file and shell tools
+ lillycoder drops you into a chat REPL inside any folder. The model on the
+ other end can read, write, and edit files, run shell commands, install
+ packages, and grep your project. It talks to any OpenAI-compatible /v1
+ endpoint, so you pair it with whichever local LLM server you already use
+ (llama.cpp, ollama, LM Studio, etc.). No cloud, no API key, no telemetry.
+ .
+ Every mutating action is gated. Hard-banned commands (sudo, rm -rf /,
+ mkfs, fork bombs) are refused even with --bypass-permissions.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The LLM can read, write, and
+ delete files in the current working directory and run shell commands.
+ You alone are responsible for any damage. By installing you accept full
+ risk. See /usr/share/doc/lillycoder/README.md for the full disclaimer.
+Filename: pool/main/l/lillycoder/lillycoder_0.2.2-1_all.deb
+Size: 57978
+MD5sum: 60b07fa0882427f044e4836f9d205e17
+SHA256: 5f5789711c50944439751d3c73ba5700967ab323569323958ad1ce86ce612f86
+
+Package: lillycoder
+Version: 0.3.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-httpx, python3-prompt-toolkit, python3-rich, python3-pydantic
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/lillycoder
+Description: local-first coder REPL with file and shell tools
+ lillycoder drops you into a chat REPL inside any folder. The model on the
+ other end can read, write, and edit files, run shell commands, install
+ packages, and grep your project. It talks to any OpenAI-compatible /v1
+ endpoint, so you pair it with whichever local LLM server you already use
+ (llama.cpp, ollama, LM Studio, etc.). No cloud, no API key, no telemetry.
+ .
+ Every mutating action is gated. Hard-banned commands (sudo, rm -rf /,
+ mkfs, fork bombs) are refused even with --bypass-permissions.
+ .
+ lillycoder scans local endpoints and can use the optional hydra-llm command
+ to list downloaded models and start the one selected by the user.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The LLM can read, write, and
+ delete files in the current working directory and run shell commands.
+ You alone are responsible for any damage. By installing you accept full
+ risk. See /usr/share/doc/lillycoder/README.md for the full disclaimer.
+Filename: pool/main/l/lillycoder/lillycoder_0.3.0-1_all.deb
+Size: 68116
+MD5sum: a51eca0c2c6fb91bc9e021d554af995e
+SHA256: 87f058622be11702ff197395a6bdaac185174d42ced0446bd4cbc685869fb369
+
+Package: lillycoder
+Version: 0.3.1-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-httpx, python3-prompt-toolkit, python3-rich, python3-pydantic
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/lillycoder
+Description: local-first coder REPL with file and shell tools
+ lillycoder drops you into a chat REPL inside any folder. The model on the
+ other end can read, write, and edit files, run shell commands, install
+ packages, and grep your project. It talks to any OpenAI-compatible /v1
+ endpoint, so you pair it with whichever local LLM server you already use
+ (llama.cpp, ollama, LM Studio, etc.). No cloud, no API key, no telemetry.
+ .
+ Every mutating action is gated. Hard-banned commands (sudo, rm -rf /,
+ mkfs, fork bombs) are refused even with --bypass-permissions.
+ .
+ lillycoder scans local endpoints and can use the optional hydra-llm command
+ to list downloaded models and start the one selected by the user.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The LLM can read, write, and
+ delete files in the current working directory and run shell commands.
+ You alone are responsible for any damage. By installing you accept full
+ risk. See /usr/share/doc/lillycoder/README.md for the full disclaimer.
+Filename: pool/main/l/lillycoder/lillycoder_0.3.1-1_all.deb
+Size: 68456
+MD5sum: 7bb48a69f9a582b9fdcb6aacdb98c878
+SHA256: 38991acf5e246e8596cf3a780a887a8b9a4ee2ba8f6323cb512615c5a1afb7e1
+
+Package: lillycoder
+Version: 0.3.2-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-httpx, python3-prompt-toolkit, python3-rich, python3-pydantic
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/lillycoder
+Description: local-first coder REPL with file and shell tools
+ lillycoder drops you into a chat REPL inside any folder. The model on the
+ other end can read, write, and edit files, run shell commands, install
+ packages, and grep your project. It talks to any OpenAI-compatible /v1
+ endpoint, so you pair it with whichever local LLM server you already use
+ (llama.cpp, ollama, LM Studio, etc.). No cloud, no API key, no telemetry.
+ .
+ Every mutating action is gated. Hard-banned commands (sudo, rm -rf /,
+ mkfs, fork bombs) are refused even with --bypass-permissions.
+ .
+ lillycoder scans local endpoints and can use the optional hydra-llm command
+ to list downloaded models and start the one selected by the user.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The LLM can read, write, and
+ delete files in the current working directory and run shell commands.
+ You alone are responsible for any damage. By installing you accept full
+ risk. See /usr/share/doc/lillycoder/README.md for the full disclaimer.
+Filename: pool/main/l/lillycoder/lillycoder_0.3.2-1_all.deb
+Size: 68834
+MD5sum: 2c8bfbffcc9cd38015b8d00480d7afff
+SHA256: 4420eab19d52a7bd42b2d085969a03fd7038433f1a079cf5471f8bbe044ab35c
+
+Package: lillycoder
+Version: 0.3.3-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: python3 (>= 3.10), python3-httpx, python3-prompt-toolkit, python3-rich, python3-pydantic
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/lillycoder
+Description: local-first coder REPL with file and shell tools
+ lillycoder drops you into a chat REPL inside any folder. The model on the
+ other end can read, write, and edit files, run shell commands, install
+ packages, and grep your project. It talks to any OpenAI-compatible /v1
+ endpoint, so you pair it with whichever local LLM server you already use
+ (llama.cpp, ollama, LM Studio, etc.). No cloud, no API key, no telemetry.
+ .
+ Every mutating action is gated. Hard-banned commands (sudo, rm -rf /,
+ mkfs, fork bombs) are refused even with --bypass-permissions.
+ .
+ lillycoder scans local endpoints and can use the optional hydra-llm command
+ to list downloaded models and start the one selected by the user.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The LLM can read, write, and
+ delete files in the current working directory and run shell commands.
+ You alone are responsible for any damage. By installing you accept full
+ risk. See /usr/share/doc/lillycoder/README.md for the full disclaimer.
+Filename: pool/main/l/lillycoder/lillycoder_0.3.3-1_all.deb
+Size: 69358
+MD5sum: 62c58e0ac831eab810a0838844941898
+SHA256: 14f2b9146b5865696cbf44f206af4313077c89796bc051c31f5022eaba697923
+
+Package: meowtrics
+Version: 0.2.10-1
+Architecture: amd64
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: libc6, libssl3, libdbus-1-3
+Section: utils
+Priority: optional
+Homepage: https://github.com/ra-yavuz/meowtrics
+Description: animated emoji tray pet that reacts to your machine's vital signs
+ meowtrics shows a small animated emoji in your system tray that morphs
+ based on live sensor readings (CPU, RAM, thermals, battery, disk, network,
+ and more). Hover reveals a one-line take on what's going on. KDE Plasma 6
+ gets a richer popup; other desktops get the tray icon via the
+ StatusNotifierItem standard.
+ .
+ DISCLAIMER: provided AS IS, no warranty. The author is not liable for any
+ damage to hardware, data, or system. By installing you accept full
+ responsibility. Personal open-source project; no commercial support.
+ See /usr/share/doc/meowtrics/README.md for the full disclaimer.
+Filename: pool/main/m/meowtrics/meowtrics_0.2.10-1_amd64.deb
+Size: 1764810
+MD5sum: 4075cd8332c91b84907d56aaf25537e0
+SHA256: 41e2fb83c21af8a2f045ed5ef71cab95d67edc4fc1ced67ccea916a83e1c1e3f
+
+Package: portunus-ovpn
+Version: 0.1.0-1
+Architecture: all
+Maintainer: Ramazan Yavuz <yavuzramazan1994@gmail.com>
+Depends: network-manager (>= 1.40), network-manager-openvpn, plasma-workspace (>= 6.0)
+Section: kde
+Priority: optional
+Homepage: https://github.com/ra-yavuz/portunus-ovpn
+Description: KDE Plasma 6 panel widget for switching OpenVPN connections
+ portunus-ovpn is a native KDE Plasma 6 panel widget that imports, edits,
+ removes, exports and toggles OpenVPN connections through NetworkManager.
+ One VPN can be active at a time by default; multiple-active mode is
+ available for split-tunnel combinations.
+ .
+ The widget drives the standard nmcli + NetworkManager + KWallet stack
+ that ships with KDE. There is no second VPN daemon, no third-party PPA,
+ and no parallel secret store.
+ .
+ DISCLAIMER: provided AS IS, no warranty. Toggles VPN connections, runs
+ nmcli on your behalf, imports profile files (including private keys),
+ and asks NetworkManager + KWallet to store key passphrases for you. The
+ author is not liable for any damage to hardware, data, network, traffic
+ exposure, or security. You are responsible for the contents of the
+ .ovpn profiles you import. See /usr/share/doc/portunus-ovpn/README.md
+ for the full disclaimer.
+Filename: pool/main/p/portunus-ovpn/portunus-ovpn_0.1.0-1_all.deb
+Size: 13172
+MD5sum: d319ac0974bbe15251277eeeb2923591
+SHA256: d2c7651040ed06f7d5677fa449d1c3dbaeab9155ac2c0570f582687b8dc96603
 

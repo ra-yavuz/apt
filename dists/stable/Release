@@ -6,11 +6,11 @@ Version: 1.0
 Architectures: amd64 arm64 all
 Components: main
 Description: Personal Debian/Ubuntu apt repository for ra-yavuz Linux tools.
-Date: Tue, 05 May 2026 08:50:53 UTC
+Date: Tue, 22 Sep 2026 13:06:43 UTC
 SHA256:
- 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-all/Packages
- adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-all/Packages.gz
- 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-amd64/Packages
- adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-amd64/Packages.gz
- 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-arm64/Packages
- adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-arm64/Packages.gz
+ 6182f1bd21d5ef4b3faeea48777271b1bfeff3da878a6accb17e5297bfaf2f8a           103335 main/binary-all/Packages
+ 435943a841ffe6a5aa4bf29b5cbe4f900653216b64b3c7a9c12a008cba90ce02            12423 main/binary-all/Packages.gz
+ 87fb75d5d8f32011b087946ccdb5f750bd469c011cf048f235cbe88520333ce9           104432 main/binary-amd64/Packages
+ f495520793687f5bd84bc0b03b209ff7a482fddb89558f3c69b337879c039bba            12809 main/binary-amd64/Packages.gz
+ 6182f1bd21d5ef4b3faeea48777271b1bfeff3da878a6accb17e5297bfaf2f8a           103335 main/binary-arm64/Packages
+ b4b78dc8017cc9af398508147ad18e7e938f6c5a98bc5e542774f06188e8665a            12423 main/binary-arm64/Packages.gz

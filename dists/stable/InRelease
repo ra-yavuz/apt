@@ -9,27 +9,27 @@ Version: 1.0
 Architectures: amd64 arm64 all
 Components: main
 Description: Personal Debian/Ubuntu apt repository for ra-yavuz Linux tools.
-Date: Tue, 05 May 2026 08:50:53 UTC
+Date: Tue, 22 Sep 2026 13:06:43 UTC
 SHA256:
- 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-all/Packages
- adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-all/Packages.gz
- 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-amd64/Packages
- adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-amd64/Packages.gz
- 42f7418ba54adf1d3e852092f41311b6ec160fd5ea98c8e6f79953b861d184ab             1430 main/binary-arm64/Packages
- adfa60c1c539e9b1ae20f04e48ee13c2b7a72f30be622804acce5571f8a5f9d7              878 main/binary-arm64/Packages.gz
+ 6182f1bd21d5ef4b3faeea48777271b1bfeff3da878a6accb17e5297bfaf2f8a           103335 main/binary-all/Packages
+ 435943a841ffe6a5aa4bf29b5cbe4f900653216b64b3c7a9c12a008cba90ce02            12423 main/binary-all/Packages.gz
+ 87fb75d5d8f32011b087946ccdb5f750bd469c011cf048f235cbe88520333ce9           104432 main/binary-amd64/Packages
+ f495520793687f5bd84bc0b03b209ff7a482fddb89558f3c69b337879c039bba            12809 main/binary-amd64/Packages.gz
+ 6182f1bd21d5ef4b3faeea48777271b1bfeff3da878a6accb17e5297bfaf2f8a           103335 main/binary-arm64/Packages
+ b4b78dc8017cc9af398508147ad18e7e938f6c5a98bc5e542774f06188e8665a            12423 main/binary-arm64/Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEOX+CYYLEr7PlQnlHe4oB3gHbXloFAmn5r20ACgkQe4oB3gHb
-Xlr8Gg//eJt1dLWrsmckSPjRjMDi5h9OakLR5hesTCUqwjB9T9wN7TU6wLrx88dh
-hKN/XyR2JQu6ZtuwWokHLHsYykvHESaC8VAb6lO7gCcgEfySfyuYakDwZGKXcSuL
-USxsAKNTiec/Uqq/xI/Xlgqwij9jb7lZch5Ze0yDO66a/c+Bm01wrzfLqCmlsJt6
-5qIp1v/ln+aTlQXoxIv1B1qUPwfkZKXgH8KdbVKf6utCi5PZ+BAk7tswiV+YGgPE
-xNeMCvFVsPCPGgpaTTotnCVLVXCGYw0ako+V4QDtOav/AE8dfUFnDb+nNL1irZgW
-0Fv6huRaKuPCuWK9de6avFk5lc0Iv/FkdHomLuOb6qz5bt9lINDMiQF4C7BbssAB
-TPmLYcRzY/T88zBzuksjx03gqXBT0s2rj9gI36jZzpr9+QKcNh1NGX9vFSE9ZgJM
-9vL8F9qIG5DC3D0XnrCZKHZcGQEd8yxDZUdK7fwELgJ5+PhtcWcH0jOHKCtDg98J
-QsLp1AZBASf7QTH7T/C6fAEJMoWougEjaNtEGtZaCSd8WERfprTBKX4LgoG4fZmu
-adZgL9EZxhAOiTsWEvlUTd+lGgLZjW/Pm4023yHh+fr+NVrTA7pwEX8qvXLIUNV0
-F1IK019rWBX5xxiasH2LHtK5s+r5WSzSrmEZEwUCZOeOw5UGW4I=
-=Q39s
+iQIzBAEBCgAdFiEEOX+CYYLEr7PlQnlHe4oB3gHbXloFAmqyfWMACgkQe4oB3gHb
+XlrxUA/+PNOJsbLytLZ2JcSGtKOl+9Cbd5+nrbZReZB0ORaMiJYv9ngZ8SzUrqVn
+7W550vtCUxRui6Aiu0Y0rQ+wY8k34RhnyVxQKgOwLV4KML5r07cj0pvaYq8Of8sy
+Ab6IMpd0TngQZarCnq3sAvQ8YQgSnL4NgjK4NHCFy3albsL9m8h2T+qWGg1XdWXq
+fr6z1XxQQgHT4fjJL5QvsZup8Sq0E3dnCZnyDgfI4md4XRGPpWnypWwx8CbAclQn
+21EsHFf8pglGnnws+vUWqs6PTzewbpugPkbRsOzrl7HTLsygQd3XC0LNorNMl8GQ
+cHiwb6wF1hQ84G5WhgwcoIxvNV8Z6qjxlFMaFoXCkP33mOb8vE5xpT7it6t9xLb4
+k8k4GtmAZcCl0JfoOjwm/CFUR/IegK1y+hpnkXExiRTBTdWU9oVau8RW/an2aDwM
+pxGMub6jJTX7dA9Y+Oz2sjrYivFOgY2OXMjk9uAo97NIncKFVIUyO8GvQQ9ka1dS
+zjtm9AkrBuYAyk7mF52eGZbYwJEkhA7qNBWQSgQHsF0cRY4iObNWN90x0IiprwW5
+/dZwjHi+GyELTB8NXQYzOmPTK9z2pyjVzpBGRTaCUZIcScPQjWhZWJE4Ql8V2yK6
+2drmfmEwteBbrL/j+HDX0+yTzzC87DHQK25hTN+Z87LV9pyYHqk=
+=ERw2
 -----END PGP SIGNATURE-----
